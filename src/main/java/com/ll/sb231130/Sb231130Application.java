@@ -1,4 +1,4 @@
-package com.example.sb231130;
+package com.ll.sb231130;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
