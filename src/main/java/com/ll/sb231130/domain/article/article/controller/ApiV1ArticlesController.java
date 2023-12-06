@@ -3,6 +3,8 @@ package com.ll.sb231130.domain.article.article.controller;
 import com.ll.sb231130.domain.article.article.dto.ArticleDto;
 import com.ll.sb231130.domain.article.article.entity.Article;
 import com.ll.sb231130.domain.article.article.service.ArticleService;
+import com.ll.sb231130.domain.member.member.entity.Member;
+import com.ll.sb231130.global.rq.Rq;
 import com.ll.sb231130.global.rsData.RsData;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 public class ApiV1ArticlesController {
     private final ArticleService articleService;
+    private final Rq rq;
 
     @Getter
     public static class GetArticlesResponseBody {
@@ -125,6 +128,38 @@ public class ApiV1ArticlesController {
                 )
         );
     }
+    @Getter
+    @Setter
+    public static class WriteArticleRequestBody {
+        private String title;
+        private String body;
+    }
+
+    @Getter
+    public static class WriteArticleResponseBody {
+        private final ArticleDto item;
+
+        public WriteArticleResponseBody(Article article) {
+            item = new ArticleDto(article);
+        }
+    }
+
+    @PostMapping("")
+    public RsData<WriteArticleResponseBody> writeArticle(
+            @RequestBody WriteArticleRequestBody body
+    ) {
+        Member member = rq.getMember();
+        Article article = articleService.write(member, body.getTitle(), body.getBody()).getData();
+
+        return RsData.of(
+                "200",
+                "성공",
+                new WriteArticleResponseBody(
+                        article
+                )
+        );
+    }
+
 }
 
 
